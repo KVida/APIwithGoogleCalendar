@@ -1,8 +1,28 @@
 <?php 
-require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/config.php';
-ini_set('session.gc_maxlifetime', 72000);
-session_start();
+require_once __DIR__ . '/function_getClient.php';
+
+try {    
+    $client = getClient();
+    $service = new Google_Service_Calendar($client);
+
+    $calendarList  = $service->calendarList->listCalendarList();
+
+} catch (Exception $e) { 
+    $eError = explode('/var/', strip_tags($e->xdebug_message));
+    $error = $eError[0];
+    $error = trim(str_replace('(','',$error));
+    $error = trim(str_replace('!','',$error));
+    $error = trim(str_replace(')','',$error));
+    if ($error == "InvalidArgumentException: invalid json token in") {
+        echo "InvalidArgumentException: invalid json token in -> Нет токена доступа";
+    } else {
+        echo 'еще ошибки';
+    }
+    exit;
+
+    /*unset($_SESSION['accessToken']);
+    header('Location: http://localhost/calendar/');*/
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -12,47 +32,15 @@ session_start();
     <link rel="stylesheet" type="text/css" href="lib/jquery-3.3.1.js">
 </head>
 <body>
-    <?php
-    try { 
-    /**
-     * Returns an authorized API client.
-     * @return Google_Client the authorized client object
-     */
-    function getClient() {
-        $client = new Google_Client();
-        $client->setApplicationName(APPLICATION_NAME);
-        $client->setScopes(SCOPES);
-        $client->setAuthConfig(CLIENT_SECRET_PATH);
-        $client->setAccessType('offline');
+    <h3>Выберете период</h3>
+    <form method="post" action="select_records.php" id="dateForCalendar" name="dateForCalendar">
+        <label>От</label>
+        <input type="date" name="calendar_from">
 
-        $accessToken = $_SESSION['accessToken'];
-        $client->setAccessToken($accessToken);
+        <label>До</label>
+        <input type="date" name="calendar_before">
 
-        return $client;
-    }
-    
-    $client = getClient();
-    $service = new Google_Service_Calendar($client);
-
-    $calendarList  = $service->calendarList->listCalendarList();
-    ?>
-
-        <h3>Выберете период</h3>
-        <form method="post" action="select_records.php" id="dateForCalendar" name="dateForCalendar">
-            <label>От</label>
-            <input type="date" name="calendar_from">
-
-            <label>До</label>
-            <input type="date" name="calendar_before">
-
-            <input type="submit" value="Отправить">
-        </form>
-
-    <?php
-    } catch (Exception $e) {
-        unset($_SESSION['accessToken']);
-        header('Location: http://localhost/calendar/');
-    }
-    ?>
+        <input type="submit" value="Отправить">
+    </form>  
 </body>
 </html>

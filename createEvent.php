@@ -1,25 +1,5 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/config.php';
-
-session_start();
-
-/**
-* Returns an authorized API client.
-* @return Google_Client the authorized client object
-*/
-function getClient() {
-    $client = new Google_Client();
-    $client->setApplicationName(APPLICATION_NAME);
-    $client->setScopes(SCOPES);
-    $client->setAuthConfig(CLIENT_SECRET_PATH);
-    $client->setAccessType('offline');
-
-    $accessToken = $_SESSION['accessToken'];
-    $client->setAccessToken($accessToken);
-
-    return $client;
-}
+require_once __DIR__ . '/function_getClient.php';
 
 try {
     $client = getClient();

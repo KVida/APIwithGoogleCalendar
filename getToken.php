@@ -21,12 +21,6 @@ if (isset($_POST['authCode'])) {
         $_SESSION['accessToken'] = $accessToken;
     }
    
-/*    // Refresh the token if it's expired.
-    if ($client->isAccessTokenExpired()) {
-        $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
-        $_SESSION['accessToken'] = $client->getAccessToken();
-    }*/
-
     header('Location: http://localhost/calendar/app.php');
 } else {
     header('Location: http://localhost/calendar/');
