@@ -26,32 +26,22 @@ try {
 
     $service = new Google_Service_Calendar($client);
     
+    $str_json = '{"summary":"22 \u043c\u0430\u0440\u0442\u0430 2018","startData":"2018-03-26T12:00:00+02:00","endData":"2018-03-26T16:00:00+02:00","location":"\u041a\u0438\u0435\u0432, \u0423\u043a\u0440\u0430\u0438\u043d\u0430, 02000","description":"\u044d\u0442\u043e \u043c\u043e\u0435 \u043f\u0435\u0440\u0432\u043e\u0435 \u043e\u043f\u0438\u0441\u0430\u043d\u0438\u0435"}';
+
+    $strEvent = json_decode($str_json, true);
+
     $event = new Google_Service_Calendar_Event(array(
-      'summary' => 'Создание нового события',
-      'location' => '800 Howard St., San Francisco, CA 94103',
-      'description' => 'A chance to hear more about Google\'s developer products.',
-      'start' => array(
-        'dateTime' => '2018-03-23T09:00:00+02:00',
-        'timeZone' => 'Europe/Kiev',
-      ),
-      'end' => array(
-        'dateTime' => '2018-03-23T17:00:00+02:00',
-        'timeZone' => 'Europe/Kiev',
-      ),
-      'recurrence' => array(
-        'RRULE:FREQ=DAILY;COUNT=2'
-      ),
-      'attendees' => array(
-        array('email' => 'lpage@example.com'),
-        array('email' => 'sbrin@example.com'),
-      ),
-      'reminders' => array(
-        'useDefault' => FALSE,
-        'overrides' => array(
-          array('method' => 'email', 'minutes' => 24 * 60),
-          array('method' => 'popup', 'minutes' => 10),
+        'summary' => $strEvent['summary'],
+        'location' => $strEvent['location'],
+        'description' => $strEvent['description'],
+        'start' => array(
+          'dateTime' => $strEvent['startData'],
+          'timeZone' => 'Europe/Kiev',
         ),
-      ),
+        'end' => array(
+          'dateTime' => $strEvent['endData'],
+          'timeZone' => 'Europe/Kiev',
+        ),
     ));
 
     $calendarId = 'primary';

@@ -47,6 +47,8 @@ try {
             echo "No upcoming events found."; 
         } else {
             foreach ($results->getItems() as $event) {
+                //print_r($event); exit;
+
                 if (!empty($event->location)) {
                     $localEvent = $event->location;
                 } else {
